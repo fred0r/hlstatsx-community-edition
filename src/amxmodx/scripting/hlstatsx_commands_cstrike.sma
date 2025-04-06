@@ -1352,4 +1352,3 @@ public hlx_block_commands(client)
  
 	return PLUGIN_CONTINUE
 }
-
