@@ -1091,7 +1091,7 @@ sub getRank
 				AND kills >= 1
 				AND (
 						(skill > ?) OR (
-							(skill = ?) AND ((kills/IF(deaths=0,1,deaths)) > ?)
+							(skill = ?) AND ((kills/IF(deaths=0,1,deaths)) > ?/?)
 						)
 				)
 		";
@@ -1099,7 +1099,7 @@ sub getRank
 			&::quoteSQL($self->{game}),
 			$self->{skill},
 			$self->{skill},
-			$kpd
+			$kills, $deaths
 		);
 		my $rankresult = &::execCached("get_player_skill_value", $query, @vals);
 		($rank) = $rankresult->fetchrow_array;
@@ -1118,7 +1118,7 @@ sub getRank
 				AND hideranking = 0
 				AND (
 						(kills > ?) OR (
-							(kills = ?) AND ((kills/IF(deaths=0,1,deaths)) > ?)
+							(kills = ?) AND ((kills/IF(deaths=0,1,deaths)) > ?/?)
 						)
 				)
 		";
@@ -1126,7 +1126,7 @@ sub getRank
 			&::quoteSQL($self->{game}),
 			$kills,
 			$kills,
-			$kpd
+			$kills, $deaths
 		);
 		my $rankresult = &::execCached("get_player_rank_value", $query, @vals);
 		($rank) = $rankresult->fetchrow_array;
