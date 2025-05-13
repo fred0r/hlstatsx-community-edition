@@ -525,8 +525,7 @@ function get_player_rank($playerdata) {
 			AND hideranking = 0
 			AND kills >= 1
 			AND (
-					(".$g_options['rankingtype']." > '".$playerdata[$g_options['rankingtype']]."') OR (
-						(".$g_options['rankingtype']." = '".$playerdata[$g_options['rankingtype']]."') AND (kills/IF(deaths=0,1,deaths) > ".($playerdata['kills']/$tempdeaths).")
+					(".$g_options['rankingtype']." = '".$playerdata[$g_options['rankingtype']]."') AND (kills/IF(deaths=0,1,deaths) > '".$playerdata['kills']."'/'".$tempdeaths."')
 					)
 			)
 	";
