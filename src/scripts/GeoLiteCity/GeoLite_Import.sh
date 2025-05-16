@@ -52,6 +52,7 @@ LANG="en"
 
 FILE="GeoLiteCity-CSV-latest.zip"
 API_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=$API_KEY&suffix=zip"
+geodata.sql
 
 # Change to directory where installer is
 cd `dirname $0`
@@ -77,8 +78,9 @@ unzip -jo $FILE || exit 1
 # IPv4
 mv GeoLite2-City-Blocks-IPv4.csv geoLiteCity_Blocks.csv
 mv GeoLite2-City-Locations-$LANG.csv geoLiteCity_Location.csv
-# Importing
-echo "[>>] Importing with localization $LANG"
+# Deleting old entries and Importing
+echo "[>>] Deleting old entries and Importing with localization $LANG"
+mysql -h $DBHOST -u $DBUSER -p $DBPASS $DBNAME < ./geodata.sql
 mysqlimport -C -d --fields-terminated-by=, --fields-enclosed-by=\" --ignore-lines=2 --default-character-set=utf8 -L -i -h $DBHOST -u $DBUSER --password=$DBPASS $DBNAME geoLiteCity_Blocks.csv
 mysqlimport -C -d --fields-terminated-by=, --fields-enclosed-by=\" --ignore-lines=2 --default-character-set=utf8 -L -i -h $DBHOST -u $DBUSER --password=$DBPASS $DBNAME geoLiteCity_Location.csv
 # Cleanup
