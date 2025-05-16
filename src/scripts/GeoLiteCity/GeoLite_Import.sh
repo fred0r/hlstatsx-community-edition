@@ -1,10 +1,5 @@
 #!/bin/sh
-# HLstatsX Community Edition - Real-time player and clan rankings and statistics
-# Copyleft (L) 2008-20XX Nicholas Hastings (nshastings@gmail.com)
-# http://www.hlxcommunity.com
-#
-# HLstatsX Community Edition is a continuation of 
-# ELstatsNEO - Real-time player and clan rankings and statistics
+
 # Copyleft (L) 2008-20XX Malte Bayer (steam@neo-soft.org)
 # http://ovrsized.neo-soft.org/
 # 
@@ -46,15 +41,17 @@ DBPASS=""
 API_KEY="<YOUR_API_KEY>"
 
 # GeoLite2-City-Location - choose language to be added: de / en / es / ru / pt-BR / zh-CN
-LANG="de"
+LANG="en"
 
 # ***** NOTHING TO CONFIGURE BELOW HERE *****
 
+FILE="GeoLiteCity-CSV-latest.zip"
 API_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=$API_KEY&suffix=zip"
 
 # Change to directory where installer is
 cd `dirname $0`
 
+# Check if Maxmind API-KEY is set
 if [[ $API_KEY =~ "<YOUR_API_KEY>" ]]; then
   echo "----------------------------------------------------------"
   echo "[!] You probably forgot to set yours MaxMind account API key!"
@@ -63,17 +60,21 @@ if [[ $API_KEY =~ "<YOUR_API_KEY>" ]]; then
   exit 3
 fi
 
-FILE="GeoLiteCity-CSV-latest.zip"
+# Cleanup former runs
 rm -f GeoLite2-City-Blocks-*.csv
 rm -f GeoLite2-City-Locations-*.csv
 rm -f $FILE
+# Download
 echo "[>>] Downloading GeoLite2-City databases"
 [ -f $FILE ] || wget $API_URL -O $FILE || exit 1
 echo "[<<] Uncompressing $FILE"
 unzip -jo $FILE || exit 1
+# IPv4
 mv GeoLite2-City-Blocks-IPv4.csv geoLiteCity_Blocks.csv
 mv GeoLite2-City-Locations-$LANG.csv geoLiteCity_Location.csv
-echo "[>>] Importing to DB with localization $LANG"
+# Deleting old entries and Importing
+echo "[>>] Deleting old entries and Importing with localization $LANG"
+mysql -h $DBHOST -u $DBUSER -p $DBPASS $DBNAME < ./geodata.sql
 mysqlimport -C -d --fields-terminated-by=, --fields-enclosed-by=\" --ignore-lines=2 --default-character-set=utf8 -L -i -h $DBHOST -u $DBUSER --password=$DBPASS $DBNAME geoLiteCity_Blocks.csv
 mysqlimport -C -d --fields-terminated-by=, --fields-enclosed-by=\" --ignore-lines=2 --default-character-set=utf8 -L -i -h $DBHOST -u $DBUSER --password=$DBPASS $DBNAME geoLiteCity_Location.csv
 # Cleanup
@@ -82,4 +83,3 @@ rm -f GeoLite2-City-*.csv
 rm -f geoLiteCity_*.csv
 rm -f $FILE
 echo "[✓] Done"
-
