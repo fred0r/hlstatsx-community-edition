@@ -52,7 +52,6 @@ LANG="en"
 
 FILE="GeoLiteCity-CSV-latest.zip"
 API_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=$API_KEY&suffix=zip"
-geodata.sql
 
 # Change to directory where installer is
 cd `dirname $0`
