@@ -8,10 +8,7 @@
     $version = "1.11.6";
 
 
-    // Perform database schema update notification
-    print "Updating database and version schema numbers.<br />";
-    $db->query("UPDATE hlstats_Options SET `value` = '$version' WHERE `keyname` = 'version'");
-    $db->query("UPDATE hlstats_Options SET `value` = '$dbversion' WHERE `keyname` = 'dbversion'");
+    // https://github.com/NiDE-gg/hlstatsx-community-edition/pull/19
 
     // Ajout d'index pour optimiser les requêtes fréquentes
     $db->query("
@@ -41,7 +38,7 @@
     ", false);
 
     $db->query("
-        ALTER TABLE hlstats_Events_ChangeRole 
+        ALTER TABLE hlstats_Events_ChangeRole https://github.com/NiDE-gg/hlstatsx-community-edition/pull/19
         ADD INDEX idx_player (playerId)
     ", false);
 
@@ -74,4 +71,9 @@
         ALTER TABLE hlstats_Events_Entries 
         ADD INDEX idx_player_server (playerId, serverId)
     ", false);
+
+    // Perform database schema update notification
+    print "Updating database and version schema numbers.<br />";
+    $db->query("UPDATE hlstats_Options SET `value` = '$version' WHERE `keyname` = 'version'");
+    $db->query("UPDATE hlstats_Options SET `value` = '$dbversion' WHERE `keyname` = 'dbversion'");
 ?>
