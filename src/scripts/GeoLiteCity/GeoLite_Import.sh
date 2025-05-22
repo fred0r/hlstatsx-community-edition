@@ -1,10 +1,5 @@
 #!/bin/sh
-# HLstatsX Community Edition - Real-time player and clan rankings and statistics
-# Copyleft (L) 2008-20XX Nicholas Hastings (nshastings@gmail.com)
-# http://www.hlxcommunity.com
-#
-# HLstatsX Community Edition is a continuation of 
-# ELstatsNEO - Real-time player and clan rankings and statistics
+
 # Copyleft (L) 2008-20XX Malte Bayer (steam@neo-soft.org)
 # http://ovrsized.neo-soft.org/
 # 
